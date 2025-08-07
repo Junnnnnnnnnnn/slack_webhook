@@ -1,14 +1,19 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { SlackModule } from '@app/slack/slack.module';
 
 describe('AppController', () => {
   let appController: AppController;
 
   beforeEach(async () => {
     const app: TestingModule = await Test.createTestingModule({
+      imports: [
+        SlackModule.forRoot({
+          projectName: 'your-project-name',
+          env: process.env.NODE_ENV,
+        }),
+      ],
       controllers: [AppController],
-      providers: [AppService],
     }).compile();
 
     appController = app.get<AppController>(AppController);
