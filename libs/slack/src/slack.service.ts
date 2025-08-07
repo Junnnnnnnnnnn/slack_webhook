@@ -1,10 +1,10 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { SlackExtraDto, SlackField } from './slack.dto';
+import { SlackButton, SlackExtraDto, SlackField } from './slack.dto';
 import { IncomingWebhook } from '@slack/webhook';
 
 @Injectable()
 export class SlackService {
-  private readonly SLACK_WEBHOOK = '';
+  private readonly SLACK_WEBHOOK = process.env.SLACK_WEBHOOK;
 
   private readonly webhook: IncomingWebhook;
 
@@ -15,7 +15,12 @@ export class SlackService {
     this.webhook = new IncomingWebhook(this.SLACK_WEBHOOK);
   }
 
-  sendError(title: string, fieldList: SlackField[], footer: string): void {
+  sendError(
+    title: string,
+    fieldList: SlackField[],
+    footer: string,
+    button?: SlackButton,
+  ): void {
     this.webhook.send({
       text: this.slackExtra.projectName,
       attachments: [
@@ -28,10 +33,16 @@ export class SlackService {
           ts: Math.floor(Date.now() / 1000).toString(),
         },
       ],
+      ...(button ? { blocks: [this.getButton(button.text, button.url)] } : {}),
     });
   }
 
-  sendInfo(title: string, fieldList: SlackField[], footer: string): void {
+  sendInfo(
+    title: string,
+    fieldList: SlackField[],
+    footer: string,
+    button?: SlackButton,
+  ): void {
     this.webhook.send({
       text: this.slackExtra.projectName,
       attachments: [
@@ -44,6 +55,24 @@ export class SlackService {
           ts: Math.floor(Date.now() / 1000).toString(),
         },
       ],
+      ...(button ? { blocks: [this.getButton(button.text, button.url)] } : {}),
     });
+  }
+
+  getButton(text: string, url: string) {
+    return {
+      type: 'actions',
+      elements: [
+        {
+          type: 'button',
+          text: {
+            type: 'plain_text',
+            text,
+          },
+          url,
+          style: 'primary',
+        },
+      ],
+    };
   }
 }

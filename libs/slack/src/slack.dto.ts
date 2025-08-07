@@ -6,5 +6,9 @@ export interface SlackExtraDto {
 export interface SlackField {
   title: string;
   value: string;
-  short: boolean;
+}
+
+export interface SlackButton {
+  text: string;
+  url: string;
 }

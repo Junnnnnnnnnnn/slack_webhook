@@ -1,12 +1,45 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { SlackService } from '@app/slack/slack.service';
+import { Controller, Get, HttpCode, HttpStatus, Post } from '@nestjs/common';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly slackService: SlackService) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  @Post('sample')
+  @HttpCode(HttpStatus.OK)
+  postSlackSample(): string {
+    this.slackService.sendInfo(
+      'Test send info',
+      [
+        {
+          title: 'slack module test',
+          value: 'hello world',
+        },
+      ],
+      new Date().toISOString(),
+    );
+
+    return 'OK';
+  }
+
+  @Post('sample/button')
+  @HttpCode(HttpStatus.OK)
+  postSlackButtonSample(): string {
+    this.slackService.sendInfo(
+      'Test send info',
+      [
+        {
+          title: 'slack button module test',
+          value: 'hello google',
+        },
+      ],
+      new Date().toISOString(),
+      {
+        text: 'google Button',
+        url: 'https://google.com',
+      },
+    );
+
+    return 'OK';
   }
 }
