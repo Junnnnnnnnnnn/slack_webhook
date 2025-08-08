@@ -46,17 +46,17 @@ A simple, ready-to-use NestJS project that sends Slack notifications using webho
 
 ### Running the Application
 
--   **Development Mode:**
+- **Development Mode:**
 
-    ```bash
-    npm run start:dev
-    ```
+  ```bash
+  npm run start:dev
+  ```
 
--   **Production Mode:**
+- **Production Mode:**
 
-    ```bash
-    npm run start:prod
-    ```
+  ```bash
+  npm run start:prod
+  ```
 
 ## 🧪 Testing
 
